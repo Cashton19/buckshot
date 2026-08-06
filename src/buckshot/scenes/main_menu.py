@@ -152,9 +152,15 @@ class MainMenu:
 
                     if button.clicked(event):
 
-                        if button.text == "Quit":
+                        if button.text in ("Two Players", "Bot"):
+                            return "play"
+
+                        elif button.text == "Quit":
                             pygame.quit()
                             sys.exit()
+
+                        elif button.text == "Online":
+                            return "online"
 
                         return button.text
 
