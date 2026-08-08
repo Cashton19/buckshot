@@ -3,6 +3,8 @@ from buckshot.config import BASE_DIR, ASSETS_DIR
 from buckshot import BuckShot
 from buckshot.scenes.main_menu import MainMenu
 from buckshot.scenes.game_environment import GameEnvironment
+from buckshot.scenes.player import Player
+from buckshot.scenes.enemy import Enemy
 
 # Initialize pygame
 game = BuckShot()
@@ -22,5 +24,9 @@ elif selection == "play":
 elif selection == "online":
     ...
 
+player = Player(game.screen)
+player.run()
+enemy = Enemy(game.screen)
+enemy.run()
 
 

@@ -1,6 +1,6 @@
 import pygame
 import sys
-
+from buckshot.config import FPS 
 
 class Button:
     def __init__(self, text, center, size=(320, 60)):
@@ -140,7 +140,7 @@ class MainMenu:
 
         while True:
 
-            clock.tick(60)
+            clock.tick(FPS)
 
             for event in pygame.event.get():
 
