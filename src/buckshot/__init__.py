@@ -9,3 +9,4 @@ class BuckShot:
         py.display.set_caption("Buckshot")
         icon = py.image.load(ASSETS_DIR / "game_logo.png")
         py.display.set_icon(icon)
+        self.clock = py.time.Clock()

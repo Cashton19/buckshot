@@ -134,34 +134,23 @@ class MainMenu:
 
         pygame.display.flip()
 
-    def run(self):
+    def update(self):
+        pass
 
-        clock = pygame.time.Clock()
+    def handle_event(self, event):
+        for button in self.buttons:
 
-        while True:
+            if button.clicked(event):
 
-            clock.tick(FPS)
+                if button.text in ("Two Players", "Bot"):
+                    return "play"
 
-            for event in pygame.event.get():
+                elif button.text == "Online":
+                    return "online"
 
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
+                elif button.text == "Quit":
+                    return "quit"
 
-                for button in self.buttons:
+        return None
 
-                    if button.clicked(event):
-
-                        if button.text in ("Two Players", "Bot"):
-                            return "play"
-
-                        elif button.text == "Quit":
-                            pygame.quit()
-                            sys.exit()
-
-                        elif button.text == "Online":
-                            return "online"
-
-                        return button.text
-
-            self.draw()
+        
