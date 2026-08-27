@@ -6,6 +6,7 @@ class Player():
 
         # Player state
         self.health = health
+        self.max_health = health
 
         self.screen = screen
         self.x = x

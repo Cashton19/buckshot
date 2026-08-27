@@ -75,3 +75,4 @@ class Shotgun:
     def has_blank_shells(self) -> bool:
         """Return True if at least one blank shell remains."""
         return self.blank_count > 0
+    

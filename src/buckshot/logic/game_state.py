@@ -35,6 +35,7 @@ class GameState:
             flipped=True,
             health=player_health
         )
+        
 
         # Game systems
         self.shotgun = Shotgun(
@@ -125,3 +126,16 @@ class GameState:
 
         self.game_over = False
         self.winner = None
+        
+    def update(self):
+        """Update game objects."""
+
+        # If your Player class has update()
+        self.player1.update()
+        self.player2.update()
+
+    def draw(self):
+        """Draw all game state objects."""
+
+        self.player1.draw()
+        self.player2.draw()
