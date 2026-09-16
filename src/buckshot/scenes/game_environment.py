@@ -17,20 +17,22 @@ class GameEnvironment:
                 ).convert_alpha(),
                 (SCREEN_WIDTH, SCREEN_HEIGHT)
             )
-            for i in range(1, 6)
+            for i in range(1, 8)
         ]
         self.bg_width = self.bg_images[0].get_width()
         self.scroll = 0
         self.speeds = [
-            0.2,
-            0.4,
-            0.6,
+            0,
+            1,
             0.8,
+            0.6,
+            0.4,
+            0.2,
             0
         ]
         
     # Rendering health bar
-        health_bar_width = int(SCREEN_WIDTH * 0.18)
+        health_bar_width = int(SCREEN_WIDTH * 0.38)
         
         original_health_bar = py.image.load(
             ASSETS_DIR / "ui" / "health_bar" / "health_bar.png"
@@ -57,21 +59,39 @@ class GameEnvironment:
         )
 
         # Position: top-left with responsive margin
-        margin_x = int(SCREEN_WIDTH * 0.03)
-        margin_y = int(SCREEN_HEIGHT * 0.03)
+        margin_x = int(SCREEN_WIDTH * 0.05)
+        top_padding = int(SCREEN_HEIGHT * 0.03)
+        player_text_space = int(SCREEN_HEIGHT * 0.08)
+        health_bar_y = player_text_space + 10
+
 
         self.health_bar_rect = self.health_bar.get_rect(
-            topleft=(margin_x, margin_y)
+            topleft=(margin_x, health_bar_y)
         )
         
         self.health_bar_right_rect = self.health_bar.get_rect(
             topright=(
-                SCREEN_WIDTH - int(SCREEN_WIDTH * 0.03),
-                int(SCREEN_HEIGHT * 0.03)
+                SCREEN_WIDTH - margin_x + 10,
+                health_bar_y
             )            
         )
-            
         
+        # render text
+        self.font = py.font.Font(ASSETS_DIR / "fonts" / "Pixeltype.ttf", 32)
+        self.player_name_left = self.font.render("Player 1", True, (255, 255, 255))
+        self.player_name_right = self.font.render("Player 2", True, (255, 255, 255))
+        
+        self.player_name_left_rect = self.player_name_left.get_rect(
+            topleft=(margin_x, top_padding)
+        )
+        self.player_name_right_rect = self.player_name_right.get_rect(
+            topright=(
+                SCREEN_WIDTH - margin_x,
+                top_padding
+                )  
+        )
+        
+            
 
 
     def handle_event(self, event):
@@ -130,4 +150,7 @@ class GameEnvironment:
             self.health_bar_right_rect, 
             (0, 0, p2_width, self.health_bar_right_rect.height)
         )
+        
+        self.screen.blit(self.player_name_left, self.player_name_left_rect)
+        self.screen.blit(self.player_name_right, self.player_name_right_rect)
             

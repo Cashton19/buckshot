@@ -20,20 +20,20 @@ class Player():
 
         if not flipped:
             idle = py.image.load(ASSETS_DIR / "sprites" / "character1" / "idle.png").convert_alpha()
-            idle_2 = py.image.load(ASSETS_DIR / "sprites" / "character1" / "idle_2.png").convert_alpha()
+            # idle_2 = py.image.load(ASSETS_DIR / "sprites" / "character1" / "idle_2.png").convert_alpha()
 
-            for i in range(4):
+            for i in range(6):
                 frame = idle.subsurface(
                     (i * frame_width, 0, frame_width, frame_height)
                 )
                 frame = py.transform.scale(frame, (SCREEN_WIDTH // 1.9, SCREEN_HEIGHT * 1.25))
 
                 self.idle_frames.append(frame)
-            for i in range(11):
-                frame = idle_2.subsurface(
-                    (i * frame_width, 0, frame_width, frame_height)
-                )
-                frame = py.transform.scale(frame, (SCREEN_WIDTH // 1.9, SCREEN_HEIGHT * 1.25))
+            # for i in range(11):
+            #     frame = idle_2.subsurface(
+            #         (i * frame_width, 0, frame_width, frame_height)
+            #     )
+            #     frame = py.transform.scale(frame, (SCREEN_WIDTH // 1.9, SCREEN_HEIGHT * 1.25))
 
 
                 self.idle_frames.append(frame)

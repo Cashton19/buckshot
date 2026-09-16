@@ -69,8 +69,6 @@ class GameState:
         # Validate target
         if target not in (current_player, opponent):
             raise ValueError("Invalid shooting target.")
-
-        # 2. Fire the shotgun
         shell = self.shotgun.fire()
 
         # 3. Apply damage only for a live shell
