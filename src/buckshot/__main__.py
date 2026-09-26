@@ -7,7 +7,7 @@ from buckshot.scenes.main_menu import MainMenu
 from buckshot.scenes.game_environment import GameEnvironment
 from buckshot.logic.game_state import GameState
 py.init()
-def main():  
+def main():   
     game = BuckShot()    
     menu = MainMenu(
         game.screen,

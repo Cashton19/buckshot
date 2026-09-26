@@ -1,7 +1,8 @@
 from buckshot.logic.shotgun import Shotgun
 from buckshot.logic.turn_manager import TurnManager
 from buckshot.scenes.player import Player
-
+from buckshot.config import SCREEN_HEIGHT
+from buckshot.config import SCREEN_WIDTH
 
 class GameState:
     """Owns and manages the state of a Buckshot game."""
@@ -22,16 +23,16 @@ class GameState:
         # Players
         self.player1 = Player(
             screen,
-            x=-100,
-            y=-180,
+            x= -(SCREEN_WIDTH * 0.08),
+            y= -(SCREEN_HEIGHT * 0.22),
             flipped=False,
             health=player_health
         )
 
         self.player2 = Player(
             screen,
-            x=700,
-            y=-180,
+            x= SCREEN_WIDTH * 0.55,
+            y=-(SCREEN_HEIGHT * 0.22),
             flipped=True,
             health=player_health
         )
