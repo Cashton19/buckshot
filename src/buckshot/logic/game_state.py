@@ -26,7 +26,7 @@ class GameState:
             x= -(SCREEN_WIDTH * 0.08),
             y= -(SCREEN_HEIGHT * 0.22),
             flipped=False,
-            health=player_health
+            health=player_health,
         )
 
         self.player2 = Player(
@@ -88,6 +88,7 @@ class GameState:
             and shell == Shotgun.BLANK
         ):
             self._reload_if_empty()
+            self.turn_manager.switch_turn()
             return shell
 
         # 5. Every other outcome switches the turn

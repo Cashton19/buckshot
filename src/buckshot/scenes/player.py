@@ -11,30 +11,30 @@ class Player():
         self.x = x
         self.y = y
         self.flipped = flipped
-        self.idle_frames = []
-        frame_width = 128.0
-        frame_height = 128.0
+        self.total_frames = []
+        self.frame_width = 128.0
+        self.frame_height = 128.0
         self.current_frame = 0
         self.animation_timer = 0
 
         if not flipped:
             idle = py.image.load(ASSETS_DIR / "sprites" / "character1" / "idle.png").convert_alpha()
-            for i in range(6):
+            for i in range(4):
                 frame = idle.subsurface(
-                    (i * frame_width, 0, frame_width, frame_height)
+                    (i * self.frame_width, 0, self.frame_width, self.frame_height)
                 )
                 frame = py.transform.scale_by(frame, 5)
-                self.idle_frames.append(frame)
+                self.total_frames.append(frame)
                 
         if flipped:
             idle = py.image.load(ASSETS_DIR / "sprites" / "character2" / "idle.png").convert_alpha()
             idle = py.transform.flip(idle, True, False) 
-            for i in range(6):
+            for i in range(4):
                 frame = idle.subsurface(
-                    (i * frame_width, 0, frame_width, frame_height)
+                    (i * self.frame_width, 0, self.frame_width, self.frame_height)
                 )
                 frame = py.transform.scale_by(frame, 5) 
-                self.idle_frames.append(frame)
+                self.total_frames.append(frame)
 
     def fire(self):
         """Perform the player's firing action."""
@@ -59,12 +59,12 @@ class Player():
 
             self.current_frame += 1
 
-            if self.current_frame >= len(self.idle_frames):
+            if self.current_frame >= len(self.total_frames):
                 self.current_frame = 0
 
     def draw(self):
         self.screen.blit(
-            self.idle_frames[self.current_frame],
+            self.total_frames[self.current_frame],
             (self.x, self.y)
         )
        

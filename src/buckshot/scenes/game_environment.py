@@ -8,6 +8,7 @@ class GameEnvironment:
     def __init__(self, screen, game_state):
         self.screen = screen
         self.game_state = game_state
+        self.result = None
 
     # redering background
         self.bg_images = [
@@ -59,19 +60,19 @@ class GameEnvironment:
         )
 
         # Position: top-left with responsive margin
-        margin_x = int(SCREEN_WIDTH * 0.05)
-        top_padding = int(SCREEN_HEIGHT * 0.03)
+        self.margin_x = int(SCREEN_WIDTH * 0.05)
+        self.top_padding = int(SCREEN_HEIGHT * 0.03)
         player_text_space = int(SCREEN_HEIGHT * 0.08)
         health_bar_y = player_text_space + 10
 
 
         self.health_bar_rect = self.health_bar.get_rect(
-            topleft=(margin_x, health_bar_y)
+            topleft=(self.margin_x, health_bar_y)
         )
         
         self.health_bar_right_rect = self.health_bar.get_rect(
             topright=(
-                SCREEN_WIDTH - margin_x + 10,
+                SCREEN_WIDTH - self.margin_x + 10,
                 health_bar_y
             )            
         )
@@ -81,36 +82,47 @@ class GameEnvironment:
         self.player_name_left = self.font.render("Player 1", True, (255, 255, 255))
         self.player_name_right = self.font.render("Player 2", True, (255, 255, 255))
         
-        self.player_name_left_rect = self.player_name_left.get_rect(
-            topleft=(margin_x, top_padding)
-        )
-        self.player_name_right_rect = self.player_name_right.get_rect(
-            topright=(
-                SCREEN_WIDTH - margin_x,
-                top_padding
-                )  
-        )
         
             
 
 
     def handle_event(self, event):
         if event.type == py.KEYDOWN:
-            result = None
             if event.key == py.K_SPACE:
                 # Shoot opponent
-                result = self.game_state.shoot(self.game_state.turn_manager.opponent)
-                print(f"Shot opponent! Result: {result}")
+                self.result = self.game_state.shoot(self.game_state.turn_manager.opponent)
+                if self.result == "live" and self.game_state.turn_manager.current_player_index == 0:
+                    self.game_state.player1.idle =  py.image.load(ASSETS_DIR / "sprites" / "character1" / "shoot.png").convert_alpha()
+                    print("animation played")
+                
+                print(f"Shot opponent! Result: {self.result}")
             elif event.key == py.K_s:
                 # Shoot self
-                result = self.game_state.shoot(self.game_state.turn_manager.current_player)
-                print(f"Shot self! Result: {result}")
+                self.result = self.game_state.shoot(self.game_state.turn_manager.current_player)
+                print(f"Shot self! Result: {self.result}")
             
             if self.game_state.game_over:
                 print(f"Game Over! Winner: {self.game_state.winner}")
 
     def update(self):
         self.scroll += 2
+        if self.game_state.turn_manager.current_player_index == 0:
+            self.player_name_left = self.font.render("Player 1", True, (255, 0, 0))
+            self.player_name_right = self.font.render("Player 2", True, (255, 255, 255))
+        elif self.game_state.turn_manager.current_player_index == 1:
+            self.player_name_left = self.font.render("Player 1", True, (255, 255, 255))
+            self.player_name_right = self.font.render("Player 2", True, (255, 0, 0))
+            
+        self.player_name_left_rect = self.player_name_left.get_rect(
+            topleft=(self.margin_x, self.top_padding)
+        )
+        self.player_name_right_rect = self.player_name_right.get_rect(
+            topright=(
+                SCREEN_WIDTH - self.margin_x,
+                self.top_padding
+                )  
+        )
+
 
 
     def draw(self):

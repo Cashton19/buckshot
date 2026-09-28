@@ -6,6 +6,7 @@ from buckshot import BuckShot
 from buckshot.scenes.main_menu import MainMenu
 from buckshot.scenes.game_environment import GameEnvironment
 from buckshot.logic.game_state import GameState
+
 py.init()
 def main():   
     game = BuckShot()    
@@ -16,7 +17,7 @@ def main():
     game_state = GameState(game.screen)  
     game_environment = GameEnvironment(
         game.screen,
-        game_state
+        game_state,
     )  
     current_scene = "menu"
     while True:
