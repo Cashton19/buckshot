@@ -32,6 +32,9 @@ class GameEnvironment:
             0
         ]
         
+        self.game_state.player1.play_idle_anims()
+        self.game_state.player2.play_idle_anims()        
+
     # Rendering health bar
         health_bar_width = int(SCREEN_WIDTH * 0.38)
         
@@ -82,9 +85,6 @@ class GameEnvironment:
         self.player_name_left = self.font.render("Player 1", True, (255, 255, 255))
         self.player_name_right = self.font.render("Player 2", True, (255, 255, 255))
         
-        
-            
-
 
     def handle_event(self, event):
         if event.type == py.KEYDOWN:
@@ -92,7 +92,7 @@ class GameEnvironment:
                 # Shoot opponent
                 self.result = self.game_state.shoot(self.game_state.turn_manager.opponent)
                 if self.result == "live" and self.game_state.turn_manager.current_player_index == 0:
-                    self.game_state.player1.idle =  py.image.load(ASSETS_DIR / "sprites" / "character1" / "shoot.png").convert_alpha()
+                    
                     print("animation played")
                 
                 print(f"Shot opponent! Result: {self.result}")
@@ -122,6 +122,8 @@ class GameEnvironment:
                 self.top_padding
                 )  
         )
+        self.game_state.player1.update()
+        self.game_state.player2.update()
 
 
 
@@ -141,6 +143,9 @@ class GameEnvironment:
                     )
                 )
         
+        self.game_state.player1.draw()
+        self.game_state.player2.draw()
+
         # Player 1 health bar (Left)
         p1_ratio = self.game_state.player1.health / self.game_state.player1.max_health
         p1_width = int(self.health_bar_rect.width * p1_ratio)

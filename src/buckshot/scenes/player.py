@@ -1,8 +1,9 @@
 import pygame as py
 from buckshot.config import ASSETS_DIR, SCREEN_HEIGHT, SCREEN_WIDTH, FPS
 
+
 class Player():
-    def __init__(self, screen, x, y, flipped = False, health=5):
+    def __init__(self, screen, x, y, path, flipped = False, health=5):
 
         # Player state
         self.health = health
@@ -16,25 +17,24 @@ class Player():
         self.frame_height = 128.0
         self.current_frame = 0
         self.animation_timer = 0
+        self.path = path
 
-        if not flipped:
-            idle = py.image.load(ASSETS_DIR / "sprites" / "character1" / "idle.png").convert_alpha()
-            for i in range(4):
+
+    def play_idle_anims(self):
+        try:
+            idle = py.image.load(self.path).convert_alpha()
+            
+            if self.flipped:                
+                idle = py.transform.flip(idle, True, False) 
+
+            for i in range(6):
                 frame = idle.subsurface(
                     (i * self.frame_width, 0, self.frame_width, self.frame_height)
                 )
                 frame = py.transform.scale_by(frame, 5)
                 self.total_frames.append(frame)
-                
-        if flipped:
-            idle = py.image.load(ASSETS_DIR / "sprites" / "character2" / "idle.png").convert_alpha()
-            idle = py.transform.flip(idle, True, False) 
-            for i in range(4):
-                frame = idle.subsurface(
-                    (i * self.frame_width, 0, self.frame_width, self.frame_height)
-                )
-                frame = py.transform.scale_by(frame, 5) 
-                self.total_frames.append(frame)
+        except Exception as e:
+            print("Error : {e}")
 
     def fire(self):
         """Perform the player's firing action."""
@@ -63,6 +63,8 @@ class Player():
                 self.current_frame = 0
 
     def draw(self):
+        if not self.total_frames:
+            return
         self.screen.blit(
             self.total_frames[self.current_frame],
             (self.x, self.y)
