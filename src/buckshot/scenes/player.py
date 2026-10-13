@@ -3,7 +3,7 @@ from buckshot.config import ASSETS_DIR, SCREEN_HEIGHT, SCREEN_WIDTH, FPS
 
 
 class Player():
-    def __init__(self, screen, x, y, path, flipped = False, health=5):
+    def __init__(self, screen, x, y, flipped = False, health=5):
 
         # Player state
         self.health = health
@@ -17,24 +17,38 @@ class Player():
         self.frame_height = 128.0
         self.current_frame = 0
         self.animation_timer = 0
-        self.path = path
-
+        self.idle_anims = py.image.load(ASSETS_DIR / "sprites" / "character2" / "idle.png").convert_alpha() if self.flipped else py.image.load(ASSETS_DIR / "sprites" / "character1" / "idle.png").convert_alpha()
+        self.shoot_anims = py.image.load(ASSETS_DIR / "sprites" / "character2" / "shoot.png").convert_alpha() if self.flipped else py.image.load(ASSETS_DIR / "sprites" / "character1" / "shoot.png").convert_alpha()
+        if self.flipped:                
+            self.idle_anims = py.transform.flip(self.idle_anims, True, False) 
+            self.shoot_anims = py.transform.flip(self.shoot_anims, True, False) 
 
     def play_idle_anims(self):
-        try:
-            idle = py.image.load(self.path).convert_alpha()
-            
-            if self.flipped:                
-                idle = py.transform.flip(idle, True, False) 
-
+        try:            
             for i in range(6):
-                frame = idle.subsurface(
+                frame = self.idle_anims.subsurface(
                     (i * self.frame_width, 0, self.frame_width, self.frame_height)
                 )
                 frame = py.transform.scale_by(frame, 5)
                 self.total_frames.append(frame)
         except Exception as e:
             print("Error : {e}")
+
+    def play_shoot_anims(self):
+        try:
+            for i in range(4):
+                frame = self.shoot_anims.subsurface(
+                    (i * self.frame_width, 0, self.frame_width, self.frame_height)
+                )
+                frame = py.transform.scale_by(frame, 5)
+                self.total_frames.append(frame)
+        except Exception as e:
+            print("Error : {e}")
+
+    def stop_shoot_anims(self):
+        self.total_frames = []
+        self.current_frame = 0
+        self.animation_timer = 0
 
     def fire(self):
         """Perform the player's firing action."""

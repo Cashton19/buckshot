@@ -8,7 +8,8 @@ class GameEnvironment:
     def __init__(self, screen, game_state):
         self.screen = screen
         self.game_state = game_state
-        self.result = None
+        self.result = None 
+        self.stop_anims_event = py.USEREVENT + 1
 
     # redering background
         self.bg_images = [
@@ -91,10 +92,16 @@ class GameEnvironment:
             if event.key == py.K_SPACE:
                 # Shoot opponent
                 self.result = self.game_state.shoot(self.game_state.turn_manager.opponent)
-                if self.result == "live" and self.game_state.turn_manager.current_player_index == 0:
+                if self.result == "live" and self.game_state.turn_manager.current_player_index == 1:                   
+                    self.game_state.player1.play_shoot_anims()
+                    py.time.set_timer(self.stop_anims_event, 1000, loops=1)
                     
-                    print("animation played")
-                
+
+                if self.result == "live" and self.game_state.turn_manager.current_player_index == 0:
+                    self.game_state.player2.play_shoot_anims()
+                    py.time.set_timer(self.stop_anims_event, 1000, loops=1)
+                 
+
                 print(f"Shot opponent! Result: {self.result}")
             elif event.key == py.K_s:
                 # Shoot self
@@ -103,6 +110,14 @@ class GameEnvironment:
             
             if self.game_state.game_over:
                 print(f"Game Over! Winner: {self.game_state.winner}")
+
+        if event.type == self.stop_anims_event and self.game_state.turn_manager.current_player_index == 1 and self.result == "live":
+            self.game_state.player1.stop_shoot_anims() 
+            self.game_state.player1.play_idle_anims()
+
+        if event.type == self.stop_anims_event and self.game_state.turn_manager.current_player_index == 0 and self.result == "live":
+            self.game_state.player2.stop_shoot_anims() 
+            self.game_state.player2.play_idle_anims()
 
     def update(self):
         self.scroll += 2

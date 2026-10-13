@@ -24,7 +24,6 @@ class GameState:
             screen,
             x= -(SCREEN_WIDTH * 0.08),
             y= -(SCREEN_HEIGHT * 0.22),
-            path =  ASSETS_DIR / "sprites" / "character1" / "idle.png",
             flipped=False,
             health=player_health
         )
@@ -33,7 +32,6 @@ class GameState:
             screen,
             x= SCREEN_WIDTH * 0.55,
             y=-(SCREEN_HEIGHT * 0.22),
-            path =  ASSETS_DIR / "sprites" / "character2" / "idle.png",
             flipped=True,
             health=player_health
         )
