@@ -90,6 +90,13 @@ class GameEnvironment:
     def handle_event(self, event):
         if event.type == py.KEYDOWN:
             if event.key == py.K_SPACE:
+                
+                if self.game_state.player1.is_animating: 
+                    return
+
+                if self.game_state.player2.is_animating:
+                    return
+                
                 # Shoot opponent
                 self.result = self.game_state.shoot(self.game_state.turn_manager.opponent)
                 if self.result == "live" and self.game_state.turn_manager.current_player_index == 1:                   

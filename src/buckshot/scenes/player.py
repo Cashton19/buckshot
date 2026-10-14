@@ -17,6 +17,7 @@ class Player():
         self.frame_height = 128.0
         self.current_frame = 0
         self.animation_timer = 0
+        self.is_animating = False
         self.idle_anims = py.image.load(ASSETS_DIR / "sprites" / "character2" / "idle.png").convert_alpha() if self.flipped else py.image.load(ASSETS_DIR / "sprites" / "character1" / "idle.png").convert_alpha()
         self.shoot_anims = py.image.load(ASSETS_DIR / "sprites" / "character2" / "shoot.png").convert_alpha() if self.flipped else py.image.load(ASSETS_DIR / "sprites" / "character1" / "shoot.png").convert_alpha()
         if self.flipped:                
@@ -24,7 +25,7 @@ class Player():
             self.shoot_anims = py.transform.flip(self.shoot_anims, True, False) 
 
     def play_idle_anims(self):
-        try:            
+        try:          
             for i in range(6):
                 frame = self.idle_anims.subsurface(
                     (i * self.frame_width, 0, self.frame_width, self.frame_height)
@@ -36,6 +37,7 @@ class Player():
 
     def play_shoot_anims(self):
         try:
+            self.is_animating = True
             for i in range(4):
                 frame = self.shoot_anims.subsurface(
                     (i * self.frame_width, 0, self.frame_width, self.frame_height)
@@ -49,6 +51,7 @@ class Player():
         self.total_frames = []
         self.current_frame = 0
         self.animation_timer = 0
+        self.is_animating = False
 
     def fire(self):
         """Perform the player's firing action."""
