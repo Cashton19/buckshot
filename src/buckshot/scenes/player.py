@@ -20,9 +20,12 @@ class Player():
         self.is_animating = False
         self.idle_anims = py.image.load(ASSETS_DIR / "sprites" / "character2" / "idle.png").convert_alpha() if self.flipped else py.image.load(ASSETS_DIR / "sprites" / "character1" / "idle.png").convert_alpha()
         self.shoot_anims = py.image.load(ASSETS_DIR / "sprites" / "character2" / "shoot.png").convert_alpha() if self.flipped else py.image.load(ASSETS_DIR / "sprites" / "character1" / "shoot.png").convert_alpha()
+        self.hurt_anims = py.image.load(ASSETS_DIR / "sprites" / "character2" / "Hurt.png").convert_alpha() if self.flipped else py.image.load(ASSETS_DIR / "sprites" / "character1" / "Hurt.png").convert_alpha()
+        
         if self.flipped:                
             self.idle_anims = py.transform.flip(self.idle_anims, True, False) 
             self.shoot_anims = py.transform.flip(self.shoot_anims, True, False) 
+            self.hurt_anims = py.transform.flip(self.hurt_anims, True, False) 
 
     def play_idle_anims(self):
         try:          
@@ -46,8 +49,20 @@ class Player():
                 self.total_frames.append(frame)
         except Exception as e:
             print("Error : {e}")
+            
+    def play_hurt_anims(self):
+        try:
+            self.is_animating = True
+            for i in range(3):
+                frame = self.hurt_anims.subsurface(
+                    (i * self.frame_width, 0, self.frame_width, self.frame_height)
+                )
+                frame = py.transform.scale_by(frame, 5)
+                self.total_frames.append(frame)
+        except Exception as e:
+            print("Error : {e}")
 
-    def stop_shoot_anims(self):
+    def stop_anims(self):
         self.total_frames = []
         self.current_frame = 0
         self.animation_timer = 0
