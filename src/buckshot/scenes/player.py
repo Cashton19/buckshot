@@ -29,38 +29,38 @@ class Player():
 
     def play_idle_anims(self):
         try:          
-            for i in range(6):
+            for i in range(6) if not self.flipped else range(5, -1, -1):
                 frame = self.idle_anims.subsurface(
                     (i * self.frame_width, 0, self.frame_width, self.frame_height)
                 )
                 frame = py.transform.scale_by(frame, 5)
                 self.total_frames.append(frame)
         except Exception as e:
-            print("Error : {e}")
+            print(f"Error : {e}")
 
     def play_shoot_anims(self):
         try:
             self.is_animating = True
-            for i in range(4):
+            for i in range(4) if not self.flipped else range(3, -1, -1):
                 frame = self.shoot_anims.subsurface(
                     (i * self.frame_width, 0, self.frame_width, self.frame_height)
                 )
                 frame = py.transform.scale_by(frame, 5)
                 self.total_frames.append(frame)
         except Exception as e:
-            print("Error : {e}")
+            print(f"Error : {e}")
             
     def play_hurt_anims(self):
         try:
             self.is_animating = True
-            for i in range(3):
+            for i in range(3) if not self.flipped else range(2, -1, -1):
                 frame = self.hurt_anims.subsurface(
                     (i * self.frame_width, 0, self.frame_width, self.frame_height)
                 )
                 frame = py.transform.scale_by(frame, 5)
                 self.total_frames.append(frame)
         except Exception as e:
-            print("Error : {e}")
+            print(f"Error : {e}")
 
     def stop_anims(self):
         self.total_frames = []
