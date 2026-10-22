@@ -1,6 +1,8 @@
 from buckshot.logic.shotgun import Shotgun
 from buckshot.logic.turn_manager import TurnManager
 from buckshot.scenes.player import Player
+from buckshot.scenes.health_bar import health_bar
+from buckshot.scenes.player_text import player_text
 from buckshot.config import ASSETS_DIR, SCREEN_HEIGHT, SCREEN_WIDTH
 
 class GameState:
@@ -20,6 +22,7 @@ class GameState:
         self.blank_shells = blank_shells
 
         # Players
+        self.player_text = player_text(screen)        
         self.player1 = Player(
             screen,
             x= -(SCREEN_WIDTH * 0.08),
@@ -27,7 +30,6 @@ class GameState:
             flipped=False,
             health=player_health
         )
-
         self.player2 = Player(
             screen,
             x= SCREEN_WIDTH * 0.55,
@@ -35,6 +37,8 @@ class GameState:
             flipped=True,
             health=player_health
         )
+        self.p1_health_bar = health_bar(screen)
+        self.p2_health_bar = health_bar(screen, flipped = True)
         
 
         # Game systems
