@@ -1,5 +1,6 @@
 from buckshot.logic.shotgun import Shotgun
 from buckshot.logic.turn_manager import TurnManager
+from buckshot.logic.round_manager import RoundManager
 from buckshot.scenes.player import Player
 from buckshot.scenes.health_bar import health_bar
 from buckshot.scenes.player_text import player_text
@@ -11,8 +12,8 @@ class GameState:
     def __init__(
         self,
         screen,
-        live_shells=3,
-        blank_shells=3,
+        live_shells=4,
+        blank_shells=4,
         player_health=5
     ):
         self.screen = screen
@@ -44,8 +45,11 @@ class GameState:
         # Game systems
         self.shotgun = Shotgun(
             live_shells=self.live_shells,
-            blank_shells=self.blank_shells
+            blank_shells=self.blank_shells  
+            # first round with 50/50 chance of survival
         )
+        
+        self.round_manager = RoundManager()
 
         self.turn_manager = TurnManager(
             self.player1,
@@ -85,34 +89,14 @@ class GameState:
                 self.game_over = True
                 return shell
 
-        # 4. Shooting yourself with a blank keeps the turn
-        if (
-            target is current_player
-            and shell == Shotgun.BLANK
-        ):
-            self._reload_if_empty()
-            self.turn_manager.switch_turn()
-            return shell
-
         # 5. Every other outcome switches the turn
         self.turn_manager.switch_turn()
 
-        # 7. Reload if the shotgun is empty
-        self._reload_if_empty()
+        # go to next round
+        self.round_manager.next_round(self.turn_manager, self.shotgun)
 
         return shell
 
-    def _reload_if_empty(self):
-        """Create a new shotgun when the current one is empty."""
-
-        if self.game_over:
-            return
-
-        if self.shotgun.is_empty():
-            self.shotgun = Shotgun(
-                live_shells=self.live_shells,
-                blank_shells=self.blank_shells
-            )
 
     def reset(self):
         """Reset the entire game."""

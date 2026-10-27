@@ -1,4 +1,4 @@
-import random
+import random, math
 
 
 class Shotgun:
@@ -75,4 +75,24 @@ class Shotgun:
     def has_blank_shells(self) -> bool:
         """Return True if at least one blank shell remains."""
         return self.blank_count > 0
+    def load_shells(self, round):
+        match round:
+            case 1:
+                total = 4
+                self.live_count = math.ceil(total * 0.50)
+                self.shells = ([self.LIVE] * self.live_count + [self.BLANK] * (total - self.live_count))            
+            case 2:
+                total = random.randint(3,8)
+                self.live_count = math.ceil(total * 0.20)
+                self.shells = ([self.LIVE] * self.live_count + [self.BLANK] * (total - self.live_count))
+            case 3:
+                total = random.randint(3,5)
+                self.live_count = math.ceil(total * 0.75)
+                self.shells = ([self.LIVE] * self.live_count + [self.BLANK] * (total - self.live_count))
+
+            case _:
+                total = random.randint(3,5)
+                self.live_count = math.ceil(total * random.uniform(0.10, 1.00))
+                self.shells = ([self.LIVE] * self.live_count + [self.BLANK] * (total - self.live_count))
+
     

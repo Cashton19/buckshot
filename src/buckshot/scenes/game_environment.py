@@ -64,10 +64,14 @@ class GameEnvironment:
                  
 
                 print(f"Shot opponent! Result: {self.result}")
+                print(self.game_state.shotgun.shells)
+                print(self.game_state.round_manager.current_round)
+                
             elif event.key == py.K_s:
                 # Shoot self
                 self.result = self.game_state.shoot(self.game_state.turn_manager.current_player)
                 print(f"Shot self! Result: {self.result}")
+                print(self.game_state.round_manager.current_round)
             
             if self.game_state.game_over:
                 print(f"Game Over! Winner: {self.game_state.winner}")
