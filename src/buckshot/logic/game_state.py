@@ -88,7 +88,7 @@ class GameState:
 
             # 6. Check if the target is still alive
             if not target.is_alive():
-                self.winner = current_player
+                self.winner = opponent if target is current_player else current_player
                 self.game_over = True
                 return shell
 
