@@ -10,6 +10,13 @@ class GameEnvironment:
         self.game_state = game_state
         self.result = None 
         self.stop_anims_event = py.USEREVENT + 1
+        self.action_button_font = py.font.Font(ASSETS_DIR / "fonts" / "Pixeltype.ttf", 16)
+        self.action_button_color = (218, 166, 32)
+        self.action_button_hover_color = (245, 195, 55)
+        self.shoot_self_rect = py.Rect(0, 0, 190, 52)
+        self.shoot_self_rect.center = (int(SCREEN_WIDTH * 0.38), SCREEN_HEIGHT - 42)
+        self.shoot_opponent_rect = py.Rect(0, 0, 190, 52)
+        self.shoot_opponent_rect.center = (int(SCREEN_WIDTH * 0.62), SCREEN_HEIGHT - 42)
 
     # redering background
         self.bg_images = [
@@ -36,12 +43,29 @@ class GameEnvironment:
         self.game_state.player1.play_idle_anims()
         self.game_state.player2.play_idle_anims()        
 
+        # Align each player's feet with the ground line in background layer 7.
+        ground_image = self.bg_images[-1]
+        center_x = ground_image.get_width() // 2
+        ground_y = next(
+            (
+                y for y in range(ground_image.get_height())
+                if max(ground_image.get_at((center_x, y))[:3]) < 200
+            ),
+            int(ground_image.get_height() * 0.78),
+        )
+        self.game_state.player1.y = (
+            ground_y - self.game_state.player1.total_frames[0].get_height()
+        )
+        self.game_state.player2.y = (
+            ground_y - self.game_state.player2.total_frames[0].get_height()
+        )
+
 
         
 
     def handle_event(self, event):
-        if event.type == py.KEYDOWN:
-            if event.key == py.K_SPACE:                                
+        if event.type == py.MOUSEBUTTONDOWN and event.button == 1:
+            if self.shoot_opponent_rect.collidepoint(event.pos):                                
                 if self.game_state.player1.is_animating: 
                     return
 
@@ -68,9 +92,20 @@ class GameEnvironment:
                 print(self.game_state.shotgun.shells)
                 print(self.game_state.round_manager.current_round)
                 
-            elif event.key == py.K_s:
+            elif self.shoot_self_rect.collidepoint(event.pos):
+                if self.game_state.player1.is_animating: 
+                    return
+    
+                if self.game_state.player2.is_animating:
+                    return
                 # Shoot self
                 self.result = self.game_state.shoot(self.game_state.turn_manager.current_player)
+                if self.result == "live" and self.game_state.turn_manager.current_player_index == 0:
+                    self.game_state.player1.play_hurt_anims()
+                    py.time.set_timer(self.stop_anims_event, 1000, loops=1)
+                if self.result == "live" and self.game_state.turn_manager.current_player_index == 1:
+                    self.game_state.player2.play_hurt_anims()
+                    py.time.set_timer(self.stop_anims_event, 1000, loops=1)
                 # self.game_state.info_text.set_round(self.game_state.round_manager.current_round)
                 self.game_state.info_text.show_shot_result(self.result)
                 # self.game_state.info_text.clear_shot_result()
@@ -80,6 +115,7 @@ class GameEnvironment:
             if self.game_state.game_over:
                 print(f"Game Over! Winner: {self.game_state.winner}")
             self.game_state.info_text.show_shot_result(self.result)
+
         if event.type == self.stop_anims_event and self.game_state.turn_manager.current_player_index == 1 and self.result == "live":
             self.game_state.player1.stop_anims() 
             self.game_state.player2.stop_anims() 
@@ -130,6 +166,19 @@ class GameEnvironment:
         # Player 2 health bar (Right)
         p2_ratio = self.game_state.player2.health / self.game_state.player2.max_health
         self.game_state.p2_health_bar.draw(p2_ratio)
+
+        mouse_pos = py.mouse.get_pos()
+        self._draw_action_button(self.shoot_self_rect, "Shoot Self", mouse_pos)
+        self._draw_action_button(self.shoot_opponent_rect, "Shoot Opponent", mouse_pos)
+
+    def _draw_action_button(self, rect, label, mouse_pos):
+        """Draw a gold action button with a hover highlight."""
+        color = (self.action_button_hover_color
+                 if rect.collidepoint(mouse_pos) else self.action_button_color)
+        py.draw.rect(self.screen, color, rect, border_radius=8)
+        py.draw.rect(self.screen, (95, 67, 20), rect, width=3, border_radius=8)
+        text = self.action_button_font.render(label, True, (35, 28, 18))
+        self.screen.blit(text, text.get_rect(center=rect.center))
         
         
         

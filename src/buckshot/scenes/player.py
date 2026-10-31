@@ -33,7 +33,7 @@ class Player():
                 frame = self.idle_anims.subsurface(
                     (i * self.frame_width, 0, self.frame_width, self.frame_height)
                 )
-                frame = py.transform.scale_by(frame, 5)
+                frame = py.transform.scale_by(frame, 6)
                 self.total_frames.append(frame)
         except Exception as e:
             print(f"Error : {e}")
@@ -45,7 +45,7 @@ class Player():
                 frame = self.shoot_anims.subsurface(
                     (i * self.frame_width, 0, self.frame_width, self.frame_height)
                 )
-                frame = py.transform.scale_by(frame, 5)
+                frame = py.transform.scale_by(frame, 6)
                 self.total_frames.append(frame)
         except Exception as e:
             print(f"Error : {e}")
@@ -57,7 +57,7 @@ class Player():
                 frame = self.hurt_anims.subsurface(
                     (i * self.frame_width, 0, self.frame_width, self.frame_height)
                 )
-                frame = py.transform.scale_by(frame, 5)
+                frame = py.transform.scale_by(frame, 6)
                 self.total_frames.append(frame)
         except Exception as e:
             print(f"Error : {e}")
