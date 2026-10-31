@@ -1,6 +1,8 @@
 import pygame as py
 
 from buckshot.config import ASSETS_DIR, SCREEN_HEIGHT, SCREEN_WIDTH
+from buckshot.scenes.tiny_bullet import TinyBullet
+
 
 
 class GameEnvironment:
@@ -17,6 +19,8 @@ class GameEnvironment:
         self.shoot_self_rect.center = (int(SCREEN_WIDTH * 0.38), SCREEN_HEIGHT - 42)
         self.shoot_opponent_rect = py.Rect(0, 0, 190, 52)
         self.shoot_opponent_rect.center = (int(SCREEN_WIDTH * 0.62), SCREEN_HEIGHT - 42)
+        self.bullet_display = TinyBullet(screen)
+        self.bullet_display.append_bullet(self.game_state.shotgun.remaining())
 
     # redering background
         self.bg_images = [
@@ -135,6 +139,7 @@ class GameEnvironment:
         self.game_state.player_text.highlight(self.game_state.turn_manager.current_player_index)
         self.game_state.player1.update()
         self.game_state.player2.update()
+        self.bullet_display.update(self.game_state.shotgun.remaining())
 
 
 
@@ -158,6 +163,7 @@ class GameEnvironment:
         self.game_state.player2.draw()
         self.game_state.info_text.draw()
         self.game_state.player_text.draw()
+        self.bullet_display.draw()
 
         # Player 1 health bar (Left)
         p1_ratio = self.game_state.player1.health / self.game_state.player1.max_health
