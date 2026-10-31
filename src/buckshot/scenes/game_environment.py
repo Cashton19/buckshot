@@ -41,8 +41,7 @@ class GameEnvironment:
 
     def handle_event(self, event):
         if event.type == py.KEYDOWN:
-            if event.key == py.K_SPACE:
-                
+            if event.key == py.K_SPACE:                                
                 if self.game_state.player1.is_animating: 
                     return
 
@@ -62,7 +61,9 @@ class GameEnvironment:
                     self.game_state.player1.play_hurt_anims()
                     py.time.set_timer(self.stop_anims_event, 1000, loops=1)
                  
-
+                # self.game_state.info_text.set_round(self.game_state.round_manager.current_round)
+                
+                # self.game_state.info_text.clear_shot_result()
                 print(f"Shot opponent! Result: {self.result}")
                 print(self.game_state.shotgun.shells)
                 print(self.game_state.round_manager.current_round)
@@ -70,12 +71,15 @@ class GameEnvironment:
             elif event.key == py.K_s:
                 # Shoot self
                 self.result = self.game_state.shoot(self.game_state.turn_manager.current_player)
+                # self.game_state.info_text.set_round(self.game_state.round_manager.current_round)
+                self.game_state.info_text.show_shot_result(self.result)
+                # self.game_state.info_text.clear_shot_result()
                 print(f"Shot self! Result: {self.result}")
                 print(self.game_state.round_manager.current_round)
             
             if self.game_state.game_over:
                 print(f"Game Over! Winner: {self.game_state.winner}")
-
+            self.game_state.info_text.show_shot_result(self.result)
         if event.type == self.stop_anims_event and self.game_state.turn_manager.current_player_index == 1 and self.result == "live":
             self.game_state.player1.stop_anims() 
             self.game_state.player2.stop_anims() 
@@ -90,6 +94,7 @@ class GameEnvironment:
 
     def update(self):
         self.scroll += 2
+        self.game_state.info_text.update(self.game_state.round_manager.current_round)
         self.game_state.player_text.update()
         self.game_state.player_text.highlight(self.game_state.turn_manager.current_player_index)
         self.game_state.player1.update()
@@ -115,6 +120,7 @@ class GameEnvironment:
         
         self.game_state.player1.draw()
         self.game_state.player2.draw()
+        self.game_state.info_text.draw()
         self.game_state.player_text.draw()
 
         # Player 1 health bar (Left)

@@ -4,7 +4,9 @@ from buckshot.logic.round_manager import RoundManager
 from buckshot.scenes.player import Player
 from buckshot.scenes.health_bar import health_bar
 from buckshot.scenes.player_text import player_text
+from buckshot.scenes.info_text import info_text
 from buckshot.config import ASSETS_DIR, SCREEN_HEIGHT, SCREEN_WIDTH
+
 
 class GameState:
     """Owns and manages the state of a Buckshot game."""
@@ -23,7 +25,8 @@ class GameState:
         self.blank_shells = blank_shells
 
         # Players
-        self.player_text = player_text(screen)        
+        self.player_text = player_text(screen)     
+        self.info_text = info_text(screen)   
         self.player1 = Player(
             screen,
             x= -(SCREEN_WIDTH * 0.08),
